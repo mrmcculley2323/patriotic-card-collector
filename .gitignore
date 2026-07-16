@@ -1,0 +1,6 @@
+# Secrets — never commit these
+config.json
+
+# Runtime data
+orders.json
+__pycache__/

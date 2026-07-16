@@ -1,0 +1,27 @@
+{
+  "_instructions": "Copy this file to config.json and fill in your real values. Any value left empty keeps that feature in DEMO mode. Never share config.json or commit it anywhere public.",
+
+  "EBAY_SELLER_USERNAME": "",
+  "EBAY_CLIENT_ID": "",
+  "EBAY_CLIENT_SECRET": "",
+  "EBAY_SEARCH_QUERY": "card",
+
+  "STRIPE_SECRET_KEY": "",
+  "STRIPE_WEBHOOK_SECRET": "",
+
+  "SHIPPO_API_KEY": "",
+
+  "ADMIN_KEY": "pick-a-secret-password-for-your-orders-page",
+  "SITE_URL": "http://localhost:8321",
+
+  "SHIP_FROM": {
+    "name": "Patriotic Card Collector",
+    "street1": "YOUR STREET ADDRESS",
+    "city": "YOUR CITY",
+    "state": "XX",
+    "zip": "00000",
+    "country": "US",
+    "phone": "5555555555",
+    "email": "mrmcculley23@gmail.com"
+  }
+}

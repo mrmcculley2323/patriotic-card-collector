@@ -1,0 +1,68 @@
+[
+  {
+    "id": "pcc-001",
+    "title": "2023 Topps Chrome Rookie Refractor — PSA 9",
+    "detail": "Refractor parallel, mint corners, fresh slab",
+    "sport": "Baseball",
+    "icon": "⚾",
+    "tint": "#25406b",
+    "price": "89.99",
+    "weight_oz": 6,
+    "badge": "Graded"
+  },
+  {
+    "id": "pcc-002",
+    "title": "Panini Prizm On-Card Autograph /99",
+    "detail": "Numbered /99 — bold blue-ink signature",
+    "sport": "Football",
+    "icon": "🏈",
+    "tint": "#5a2020",
+    "price": "149.99",
+    "weight_oz": 4,
+    "badge": "Auto"
+  },
+  {
+    "id": "pcc-003",
+    "title": "Select Silver Prizm /149",
+    "detail": "Pack-fresh to sleeve, razor-sharp corners",
+    "sport": "Basketball",
+    "icon": "🏀",
+    "tint": "#3d2a5e",
+    "price": "64.99",
+    "weight_oz": 4,
+    "badge": "Numbered"
+  },
+  {
+    "id": "pcc-004",
+    "title": "Vintage Hall-of-Famer Lot (5 Cards)",
+    "detail": "1970s–80s legends, honest condition notes on every card",
+    "sport": "Baseball",
+    "icon": "⚾",
+    "tint": "#1f4d43",
+    "price": "44.99",
+    "weight_oz": 5,
+    "badge": "Vintage"
+  },
+  {
+    "id": "pcc-005",
+    "title": "Game-Worn Multi-Color Patch Relic",
+    "detail": "Multi-color patch, encased and ready for the PC",
+    "sport": "Football",
+    "icon": "🏈",
+    "tint": "#6b4a1d",
+    "price": "199.99",
+    "weight_oz": 6,
+    "badge": "Patch"
+  },
+  {
+    "id": "pcc-006",
+    "title": "Prizm Rookie Base Lot (10 Cards)",
+    "detail": "Perfect starter lot — all sleeved & top-loaded",
+    "sport": "Basketball",
+    "icon": "🏀",
+    "tint": "#23445e",
+    "price": "29.99",
+    "weight_oz": 8,
+    "badge": "Rookie"
+  }
+]

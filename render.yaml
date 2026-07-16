@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: patriotic-card-collector
+    runtime: python
+    plan: free
+    buildCommand: "echo no build needed"
+    startCommand: "python server.py"
+    envVars:
+      - key: EBAY_SELLER_USERNAME
+        value: mrmcculley23
+      - key: ADMIN_KEY
+        sync: false
+      - key: SITE_URL
+        sync: false
+      - key: EBAY_CLIENT_ID
+        sync: false
+      - key: EBAY_CLIENT_SECRET
+        sync: false
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      - key: SHIPPO_API_KEY
+        sync: false

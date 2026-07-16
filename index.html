@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Patriotic Card Collector — Sports Trading Cards</title>
+<meta name="description" content="All-American sports trading card shop. Baseball, football, and basketball cards — honest listings, rock-solid packaging, shipped with red, white & blue pride.">
+<style>
+  :root{
+    --navy:#0b1f3a;
+    --navy-deep:#071527;
+    --red:#a91e22;
+    --red-bright:#c8342f;
+    --gold:#d4a53f;
+    --gold-bright:#f0c96b;
+    --cream:#f4ead2;
+    --parchment:#e9dcbd;
+    --ink:#1a1a1a;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:Georgia,'Times New Roman',serif;
+    background:var(--navy-deep);
+    color:var(--cream);
+    line-height:1.6;
+  }
+  h1,h2,h3,h4{font-family:'Trebuchet MS','Arial Black',Impact,sans-serif;letter-spacing:.03em;}
+
+  /* ---------- top ticker ---------- */
+  .ticker{
+    background:var(--red);
+    color:var(--cream);
+    font-family:'Trebuchet MS',sans-serif;
+    font-size:.8rem;
+    letter-spacing:.15em;
+    text-transform:uppercase;
+    text-align:center;
+    padding:.45rem 1rem;
+    border-bottom:2px solid var(--gold);
+  }
+  .ticker b{color:var(--gold-bright);}
+
+  /* ---------- nav ---------- */
+  nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(7,21,39,.96);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid rgba(212,165,63,.4);
+    display:flex;align-items:center;justify-content:space-between;
+    padding:.7rem 5vw;
+  }
+  .brand{display:flex;align-items:center;gap:.7rem;text-decoration:none;}
+  .brand-mark{
+    width:44px;height:44px;flex:0 0 44px;
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 30%,var(--gold-bright),var(--gold) 55%,#8a6420);
+    display:flex;align-items:center;justify-content:center;
+    font-size:1.5rem;
+    box-shadow:0 0 0 2px var(--navy-deep),0 0 0 3.5px var(--gold);
+  }
+  .brand-name{color:var(--cream);font-family:'Trebuchet MS',sans-serif;font-weight:700;font-size:1.05rem;line-height:1.15;text-transform:uppercase;letter-spacing:.06em;}
+  .brand-name small{display:block;color:var(--gold);font-size:.62rem;letter-spacing:.28em;font-weight:400;}
+  nav ul{display:flex;gap:1.6rem;list-style:none;}
+  nav ul a{
+    color:var(--cream);text-decoration:none;
+    font-family:'Trebuchet MS',sans-serif;font-size:.85rem;
+    text-transform:uppercase;letter-spacing:.12em;
+    padding-bottom:.2rem;border-bottom:2px solid transparent;
+    transition:.2s;
+  }
+  nav ul a:hover{color:var(--gold-bright);border-bottom-color:var(--red-bright);}
+  @media(max-width:760px){nav ul{display:none;}}
+
+  /* ---------- hero ---------- */
+  header.hero{
+    position:relative;overflow:hidden;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% -10%,rgba(200,52,47,.35),transparent 60%),
+      linear-gradient(180deg,#12294a 0%,var(--navy) 45%,var(--navy-deep) 100%);
+    text-align:center;
+    padding:5.5rem 5vw 6.5rem;
+    border-bottom:4px solid var(--gold);
+  }
+  .stars{position:absolute;inset:0;pointer-events:none;}
+  .stars span{
+    position:absolute;color:rgba(240,201,107,.5);
+    animation:twinkle 3.5s ease-in-out infinite;
+  }
+  @keyframes twinkle{0%,100%{opacity:.25;transform:scale(1);}50%{opacity:.9;transform:scale(1.25);}}
+  .hero-emblem{
+    width:110px;height:110px;margin:0 auto 1.4rem;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%,var(--gold-bright),var(--gold) 55%,#8a6420);
+    display:flex;align-items:center;justify-content:center;font-size:3.4rem;
+    box-shadow:0 0 0 4px var(--navy-deep),0 0 0 7px var(--gold),0 12px 40px rgba(0,0,0,.6);
+  }
+  .hero h1{
+    font-size:clamp(2.4rem,6vw,4.5rem);
+    text-transform:uppercase;
+    background:linear-gradient(180deg,#fdf3d7 20%,var(--gold-bright) 55%,#b98a2e 90%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    text-shadow:0 3px 18px rgba(0,0,0,.45);
+    line-height:1.05;
+  }
+  .hero .banner{
+    display:inline-block;margin-top:1rem;
+    background:linear-gradient(180deg,var(--red-bright),var(--red));
+    color:var(--cream);
+    font-family:'Trebuchet MS',sans-serif;font-weight:700;
+    text-transform:uppercase;letter-spacing:.3em;font-size:clamp(.75rem,1.6vw,1rem);
+    padding:.55rem 2.2rem;
+    clip-path:polygon(3% 0,97% 0,100% 50%,97% 100%,3% 100%,0 50%);
+    box-shadow:0 6px 18px rgba(0,0,0,.5);
+  }
+  .hero p.tag{margin:1.6rem auto 0;max-width:600px;color:#cdd8e6;font-style:italic;font-size:1.05rem;}
+  .hero-cta{margin-top:2.2rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;}
+  .btn{
+    display:inline-block;text-decoration:none;cursor:pointer;
+    font-family:'Trebuchet MS',sans-serif;font-weight:700;
+    text-transform:uppercase;letter-spacing:.12em;font-size:.85rem;
+    padding:.85rem 1.9rem;border-radius:4px;border:2px solid transparent;
+    transition:.2s;
+  }
+  .btn-gold{background:linear-gradient(180deg,var(--gold-bright),var(--gold));color:var(--navy-deep);box-shadow:0 5px 16px rgba(212,165,63,.35);}
+  .btn-gold:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(212,165,63,.5);}
+  .btn-outline{border-color:var(--gold);color:var(--gold-bright);background:rgba(212,165,63,.08);}
+  .btn-outline:hover{background:rgba(212,165,63,.2);transform:translateY(-2px);}
+  .btn-red{background:linear-gradient(180deg,var(--red-bright),var(--red));color:var(--cream);}
+  .btn-red:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(200,52,47,.45);}
+
+  /* ---------- section shells ---------- */
+  section{padding:4.5rem 5vw;}
+  .section-head{text-align:center;margin-bottom:3rem;}
+  .section-head .kicker{
+    color:var(--red-bright);font-family:'Trebuchet MS',sans-serif;
+    text-transform:uppercase;letter-spacing:.35em;font-size:.75rem;font-weight:700;
+  }
+  .section-head h2{
+    font-size:clamp(1.7rem,3.5vw,2.6rem);text-transform:uppercase;color:var(--cream);
+    margin:.4rem 0 .6rem;
+  }
+  .section-head .rule{
+    width:170px;height:14px;margin:0 auto;
+    display:flex;align-items:center;justify-content:center;gap:.5rem;color:var(--gold);
+  }
+  .rule::before,.rule::after{content:"";flex:1;height:2px;background:linear-gradient(90deg,transparent,var(--gold));}
+  .rule::after{background:linear-gradient(90deg,var(--gold),transparent);}
+
+  /* ---------- shop grid ---------- */
+  #shop{background:linear-gradient(180deg,var(--navy-deep),#0d2038 50%,var(--navy-deep));}
+  .filters{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;margin-bottom:2.4rem;}
+  .chip{
+    font-family:'Trebuchet MS',sans-serif;font-size:.78rem;font-weight:700;
+    text-transform:uppercase;letter-spacing:.1em;
+    color:var(--cream);background:rgba(244,234,210,.07);
+    border:1px solid rgba(212,165,63,.45);border-radius:999px;
+    padding:.45rem 1.2rem;cursor:pointer;transition:.2s;
+  }
+  .chip:hover{background:rgba(212,165,63,.18);}
+  .chip.active{background:linear-gradient(180deg,var(--gold-bright),var(--gold));color:var(--navy-deep);border-color:var(--gold);}
+  .grid{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));
+    gap:1.6rem;max-width:1200px;margin:0 auto;
+  }
+  .card{
+    background:linear-gradient(180deg,#13294a,#0c1e38);
+    border:1px solid rgba(212,165,63,.35);
+    border-radius:10px;overflow:hidden;
+    transition:.25s;display:flex;flex-direction:column;
+  }
+  .card:hover{transform:translateY(-6px);border-color:var(--gold);box-shadow:0 16px 40px rgba(0,0,0,.55);}
+  .card-img{
+    position:relative;aspect-ratio:3/4;
+    display:flex;align-items:center;justify-content:center;
+    background:
+      repeating-linear-gradient(45deg,rgba(255,255,255,.025) 0 2px,transparent 2px 8px),
+      linear-gradient(160deg,var(--imgA,#25406b),var(--imgB,#101f38));
+    border-bottom:2px solid var(--gold);
+  }
+  .card-img .icon{font-size:4.2rem;filter:drop-shadow(0 6px 14px rgba(0,0,0,.55));}
+  .card-img .frame{
+    position:absolute;inset:14px;border:2px solid rgba(240,201,107,.5);border-radius:6px;
+    pointer-events:none;
+  }
+  .badge{
+    position:absolute;top:10px;left:10px;
+    background:linear-gradient(180deg,var(--red-bright),var(--red));color:var(--cream);
+    font-family:'Trebuchet MS',sans-serif;font-size:.62rem;font-weight:700;
+    text-transform:uppercase;letter-spacing:.12em;
+    padding:.28rem .6rem;border-radius:3px;box-shadow:0 3px 8px rgba(0,0,0,.4);
+  }
+  .badge.gold{background:linear-gradient(180deg,var(--gold-bright),var(--gold));color:var(--navy-deep);right:10px;left:auto;}
+  .card-body{padding:1rem 1.1rem 1.2rem;display:flex;flex-direction:column;gap:.35rem;flex:1;}
+  .card-body .sport{color:var(--gold);font-family:'Trebuchet MS',sans-serif;font-size:.68rem;text-transform:uppercase;letter-spacing:.22em;}
+  .card-body h3{font-size:1rem;color:var(--cream);line-height:1.3;}
+  .card-body .detail{color:#9fb0c4;font-size:.82rem;font-style:italic;}
+  .card-foot{margin-top:auto;padding-top:.8rem;display:flex;align-items:center;justify-content:space-between;gap:.5rem;}
+  .price{color:var(--gold-bright);font-family:'Trebuchet MS',sans-serif;font-weight:700;font-size:1.15rem;}
+  .card-foot a{
+    font-family:'Trebuchet MS',sans-serif;font-size:.7rem;font-weight:700;
+    text-transform:uppercase;letter-spacing:.1em;text-decoration:none;
+    color:var(--navy-deep);background:linear-gradient(180deg,var(--gold-bright),var(--gold));
+    padding:.45rem .85rem;border-radius:4px;transition:.2s;white-space:nowrap;
+  }
+  .card-foot a:hover{transform:scale(1.05);}
+  .shop-note{max-width:760px;margin:2.4rem auto 0;text-align:center;color:#9fb0c4;font-size:.9rem;font-style:italic;}
+  .shop-note a{color:var(--gold-bright);}
+
+  /* ---------- oath / trust ---------- */
+  #oath{
+    background:
+      linear-gradient(rgba(11,31,58,.92),rgba(11,31,58,.92)),
+      repeating-linear-gradient(-45deg,var(--red) 0 40px,#912024 40px 80px);
+    border-top:3px solid var(--gold);border-bottom:3px solid var(--gold);
+  }
+  .oath-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem;max-width:1100px;margin:0 auto;}
+  .oath-item{
+    text-align:center;padding:2rem 1.4rem;
+    background:rgba(7,21,39,.55);border:1px solid rgba(212,165,63,.35);border-radius:10px;
+    transition:.25s;
+  }
+  .oath-item:hover{border-color:var(--gold);transform:translateY(-4px);}
+  .oath-item .glyph{
+    width:64px;height:64px;margin:0 auto 1rem;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%,var(--gold-bright),var(--gold) 60%,#8a6420);
+    display:flex;align-items:center;justify-content:center;font-size:1.9rem;
+    box-shadow:0 0 0 3px var(--navy-deep),0 0 0 5px rgba(212,165,63,.6);
+  }
+  .oath-item h3{color:var(--gold-bright);font-size:.95rem;text-transform:uppercase;letter-spacing:.12em;margin-bottom:.5rem;}
+  .oath-item p{color:#c6d2e0;font-size:.88rem;}
+
+  /* ---------- story ---------- */
+  #story{background:var(--navy-deep);}
+  .story-wrap{
+    max-width:900px;margin:0 auto;
+    background:linear-gradient(160deg,var(--cream),var(--parchment));
+    color:var(--ink);border-radius:12px;
+    padding:3rem clamp(1.5rem,5vw,3.5rem);
+    box-shadow:0 20px 60px rgba(0,0,0,.55);
+    border:1px solid #c9b988;position:relative;
+  }
+  .story-wrap::before{
+    content:"★ ★ ★";position:absolute;top:1.1rem;left:50%;transform:translateX(-50%);
+    color:var(--red);letter-spacing:1.2em;font-size:.8rem;
+  }
+  .story-wrap h2{color:var(--navy);text-transform:uppercase;font-size:1.8rem;text-align:center;margin:1rem 0 1.4rem;}
+  .story-wrap p{margin-bottom:1rem;font-size:1.02rem;color:#33302a;}
+  .story-wrap p strong{color:var(--red);}
+  .signature{
+    margin-top:1.6rem;text-align:right;font-style:italic;color:var(--navy);
+    font-size:1.05rem;
+  }
+
+  /* ---------- channels ---------- */
+  .channel-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.6rem;max-width:1000px;margin:0 auto;}
+  .channel{
+    background:linear-gradient(180deg,#13294a,#0c1e38);
+    border:1px solid rgba(212,165,63,.35);border-radius:12px;
+    padding:2.2rem 1.8rem;text-align:center;transition:.25s;
+    display:flex;flex-direction:column;gap:.9rem;align-items:center;
+  }
+  .channel:hover{border-color:var(--gold);transform:translateY(-5px);}
+  .channel .glyph{font-size:2.6rem;}
+  .channel h3{color:var(--cream);text-transform:uppercase;letter-spacing:.1em;font-size:1.05rem;}
+  .channel p{color:#9fb0c4;font-size:.9rem;flex:1;}
+
+  /* ---------- live listings / store / modal ---------- */
+  .loading{grid-column:1/-1;text-align:center;color:#9fb0c4;font-style:italic;padding:2rem;}
+  .demo-note{
+    max-width:780px;margin:0 auto 2.2rem;text-align:center;
+    background:rgba(212,165,63,.1);border:1px solid rgba(212,165,63,.55);
+    color:var(--gold-bright);border-radius:8px;
+    font-family:'Trebuchet MS',sans-serif;font-size:.82rem;letter-spacing:.03em;
+    padding:.75rem 1.2rem;
+  }
+  .card-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+  .modal-backdrop{
+    position:fixed;inset:0;background:rgba(4,10,20,.82);z-index:100;
+    display:flex;align-items:center;justify-content:center;padding:1rem;
+  }
+  .modal{
+    background:linear-gradient(180deg,#13294a,#0c1e38);
+    border:1px solid var(--gold);border-radius:12px;
+    max-width:500px;width:100%;padding:2.1rem;position:relative;
+    max-height:92vh;overflow:auto;box-shadow:0 25px 70px rgba(0,0,0,.6);
+  }
+  .modal h3{color:var(--gold-bright);text-transform:uppercase;letter-spacing:.08em;font-size:1.05rem;margin-bottom:.3rem;}
+  .modal .item-line{color:#c6d2e0;font-size:.9rem;font-style:italic;margin-bottom:1.2rem;}
+  .modal-close{position:absolute;top:.7rem;right:.9rem;background:none;border:none;color:var(--gold-bright);font-size:1.15rem;cursor:pointer;}
+  .field{margin-bottom:.85rem;}
+  .field label{display:block;font-family:'Trebuchet MS',sans-serif;font-size:.68rem;text-transform:uppercase;letter-spacing:.14em;color:var(--gold);margin-bottom:.3rem;}
+  .field input{
+    width:100%;background:#0a1a30;border:1px solid rgba(212,165,63,.45);
+    border-radius:6px;color:var(--cream);padding:.65rem .75rem;font-family:Georgia,serif;font-size:.95rem;
+  }
+  .field input:focus{outline:none;border-color:var(--gold-bright);}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:.85rem;}
+  .modal .btn{width:100%;text-align:center;margin-top:.4rem;}
+  .form-err{color:#ff9a94;font-size:.85rem;margin-bottom:.6rem;}
+  .success-box{text-align:center;padding:.5rem 0;}
+  .success-box .big-check{font-size:3rem;margin-bottom:.6rem;}
+  .success-box p{color:#c6d2e0;font-size:.92rem;margin-bottom:.8rem;}
+  .success-box .track{color:var(--gold-bright);font-family:'Trebuchet MS',sans-serif;letter-spacing:.08em;font-size:.85rem;}
+  .toast{
+    position:fixed;bottom:1.6rem;left:50%;transform:translateX(-50%);
+    background:linear-gradient(180deg,var(--gold-bright),var(--gold));color:var(--navy-deep);
+    font-family:'Trebuchet MS',sans-serif;font-weight:700;font-size:.88rem;
+    padding:.85rem 1.5rem;border-radius:8px;z-index:200;
+    box-shadow:0 12px 34px rgba(0,0,0,.55);max-width:90vw;text-align:center;
+  }
+
+  /* ---------- footer ---------- */
+  footer{
+    background:#050e1c;border-top:3px solid var(--red);
+    padding:2.5rem 5vw 2rem;text-align:center;
+  }
+  footer .flag-rule{height:8px;max-width:420px;margin:0 auto 1.6rem;display:flex;border-radius:2px;overflow:hidden;}
+  footer .flag-rule i{flex:1;}
+  footer .flag-rule i:nth-child(odd){background:var(--red);}
+  footer .flag-rule i:nth-child(even){background:var(--cream);}
+  footer .flag-rule i:first-child{background:var(--navy);flex:1.4;}
+  footer p{color:#7d8ea3;font-size:.85rem;}
+  footer .foot-brand{color:var(--gold);font-family:'Trebuchet MS',sans-serif;text-transform:uppercase;letter-spacing:.2em;font-weight:700;margin-bottom:.4rem;}
+  footer .fine{margin-top:1rem;font-size:.72rem;color:#55647a;}
+</style>
+</head>
+<body>
+
+<div class="ticker">★ Free shipping on orders over <b>$50</b> &nbsp;•&nbsp; Every card ships in a penny sleeve + top loader + team bag &nbsp;•&nbsp; <b>Proudly American owned &amp; operated</b> ★</div>
+
+<nav>
+  <a class="brand" href="#top">
+    <span class="brand-mark">🇺🇸</span>
+    <span class="brand-name">Patriotic Card Collector<small>Stars • Stripes • Sports Cards</small></span>
+  </a>
+  <ul>
+    <li><a href="#ebay">Live On eBay</a></li>
+    <li><a href="#shop">Buy Now</a></li>
+    <li><a href="#oath">Our Oath</a></li>
+    <li><a href="#story">The Story</a></li>
+    <li><a href="#channels">Where To Buy</a></li>
+  </ul>
+</nav>
+
+<header class="hero" id="top">
+  <div class="stars" id="stars"></div>
+  <div class="hero-emblem">🇺🇸</div>
+  <h1>Patriotic<br>Card Collector</h1>
+  <div class="banner">★ Sports Trading Cards ★</div>
+  <p class="tag">Baseball. Football. Basketball. Bought, sold, and shipped with the same pride we have in the red, white, and blue.</p>
+  <div class="hero-cta">
+    <a class="btn btn-gold" href="#shop">Buy Cards Direct</a>
+    <a class="btn btn-outline" href="#ebay">See Live eBay Listings</a>
+  </div>
+</header>
+
+<section id="ebay">
+  <div class="section-head">
+    <span class="kicker">Straight From The Auction Block</span>
+    <h2>Live On eBay Right Now</h2>
+    <div class="rule">★</div>
+  </div>
+  <div class="demo-note" id="ebayNote" hidden></div>
+  <div class="grid" id="ebayGrid">
+    <p class="loading">Loading live listings…</p>
+  </div>
+  <div style="text-align:center;margin-top:2.4rem">
+    <a class="btn btn-gold" data-ebay-store href="https://www.ebay.com" target="_blank" rel="noopener">See Every Listing On eBay</a>
+  </div>
+</section>
+
+<section id="shop">
+  <div class="section-head">
+    <span class="kicker">Skip The Bidding War</span>
+    <h2>Buy It Now — Direct</h2>
+    <div class="rule">★</div>
+  </div>
+  <div class="demo-note" id="storeNote" hidden></div>
+  <div class="grid" id="storeGrid">
+
+    <p class="loading">Loading inventory…</p>
+  </div>
+
+  <p class="shop-note">Direct checkout is powered by Stripe — your card number goes straight to Stripe's secure payment page and is never seen or stored by this site. Every paid order automatically generates a USPS shipping label, so your cards are out the door fast.</p>
+</section>
+
+<section id="oath">
+  <div class="section-head">
+    <span class="kicker">The Collector's Oath</span>
+    <h2>How We Do Business</h2>
+    <div class="rule">★</div>
+  </div>
+  <div class="oath-grid">
+    <div class="oath-item">
+      <div class="glyph">🛡️</div>
+      <h3>Rock-Solid Packaging</h3>
+      <p>Penny sleeve, top loader, team bag, rigid mailer. Your card arrives the way it left — mint.</p>
+    </div>
+    <div class="oath-item">
+      <div class="glyph">📸</div>
+      <h3>Honest Photos</h3>
+      <p>What you see is the exact card you get. Corners, edges, and surface shot in clean, clear photos.</p>
+    </div>
+    <div class="oath-item">
+      <div class="glyph">🚚</div>
+      <h3>Coast-To-Coast Fast Shipping</h3>
+      <p>Orders ship fast — usually within one business day, with tracking on every package.</p>
+    </div>
+    <div class="oath-item">
+      <div class="glyph">🤝</div>
+      <h3>Word Is Bond</h3>
+      <p>Fair prices backed by real comps. If something's ever wrong, I make it right. Period.</p>
+    </div>
+  </div>
+</section>
+
+<section id="story">
+  <div class="story-wrap">
+    <h2>As American As Baseball Cards</h2>
+    <p>Patriotic Card Collector started the way most collections do — a shoebox of cards and a love of the game. Sports cards are a piece of Americana: <strong>summer ballparks, Friday night lights, and the thrill of pulling a rookie card that becomes a legend.</strong></p>
+    <p>Every card that comes through this shop gets inspected, comped against real recent sales, photographed honestly, and packaged with care. Whether it's a $5 base rookie for a kid's first binder or a graded grail for a lifelong collector, it gets the same respect.</p>
+    <p>When you buy from Patriotic Card Collector, you're not just adding to your collection — you're supporting a <strong>proudly American small business</strong> run by a collector who treats every customer like a fellow fan.</p>
+    <p class="signature">— Patriotic Card Collector 🇺🇸</p>
+  </div>
+</section>
+
+<section id="channels">
+  <div class="section-head">
+    <span class="kicker">Three Ways To Shop</span>
+    <h2>Where To Buy</h2>
+    <div class="rule">★</div>
+  </div>
+  <div class="channel-grid">
+    <div class="channel">
+      <span class="glyph">🏪</span>
+      <h3>eBay Store</h3>
+      <p>The main showcase. Full inventory with detailed photos, condition notes, and buyer protection on every order.</p>
+      <a class="btn btn-gold" data-ebay-store href="https://www.ebay.com" target="_blank" rel="noopener">Shop on eBay</a>
+    </div>
+    <div class="channel">
+      <span class="glyph">📺</span>
+      <h3>Whatnot Live Breaks</h3>
+      <p>Live auctions, rips, and steals. Follow the page so you never miss a show — deals worth waving the flag for.</p>
+      <a class="btn btn-red" href="https://www.whatnot.com/user/YOUR_WHATNOT_USERNAME" target="_blank" rel="noopener">Follow on Whatnot</a>
+    </div>
+    <div class="channel">
+      <span class="glyph">✉️</span>
+      <h3>Direct Requests</h3>
+      <p>Chasing a specific player, team, or set? Send your want list and I'll hunt it down at shows and in breaks.</p>
+      <a class="btn btn-outline" href="mailto:mrmcculley23@gmail.com?subject=Card%20Want%20List">Send A Want List</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="flag-rule"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <p class="foot-brand">★ Patriotic Card Collector ★</p>
+  <p>Proudly American owned &amp; operated • Sports trading cards bought and sold with pride</p>
+  <p class="fine">© <span id="year"></span> Patriotic Card Collector. Not affiliated with MLB, NFL, NBA, Topps, Panini, PSA, eBay, or Whatnot. All trademarks belong to their respective owners.</p>
+</footer>
+
+<div class="modal-backdrop" id="modal" hidden>
+  <div class="modal">
+    <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
+    <div id="modalBody"></div>
+  </div>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+  // twinkling stars in the hero
+  const stars = document.getElementById('stars');
+  for (let i = 0; i < 36; i++) {
+    const s = document.createElement('span');
+    s.textContent = '★';
+    s.style.left = Math.random() * 100 + '%';
+    s.style.top = Math.random() * 100 + '%';
+    s.style.fontSize = (Math.random() * 0.7 + 0.4) + 'rem';
+    s.style.animationDelay = (Math.random() * 3.5) + 's';
+    stars.appendChild(s);
+  }
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // ---------- storefront app ----------
+  const $ = id => document.getElementById(id);
+  const esc = t => { const d = document.createElement('div'); d.textContent = t ?? ''; return d.innerHTML; };
+  const money = v => '$' + Number(v).toFixed(2);
+  let STORE_ITEMS = [];
+  let EBAY_URL = 'https://www.ebay.com';
+
+  function toast(msg, ms = 6000) {
+    const t = $('toast');
+    t.textContent = msg; t.hidden = false;
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => { t.hidden = true; }, ms);
+  }
+
+  async function init() {
+    try {
+      const st = await (await fetch('/api/status')).json();
+      EBAY_URL = st.ebay_store_url;
+      document.querySelectorAll('a[data-ebay-store]').forEach(a => a.href = EBAY_URL);
+    } catch (e) { /* server offline — links keep their defaults */ }
+    loadListings();
+    loadStore();
+    const q = new URLSearchParams(location.search).get('checkout');
+    if (q === 'success') toast('🎉 Payment received! Your shipping label is being created — thanks for supporting the shop!', 9000);
+    if (q === 'cancelled') toast('Checkout cancelled — no worries, the card is still available.');
+  }
+
+  async function loadListings() {
+    const grid = $('ebayGrid');
+    try {
+      const data = await (await fetch('/api/listings')).json();
+      grid.innerHTML = '';
+      if (data.demo) {
+        $('ebayNote').hidden = false;
+        $('ebayNote').textContent = '★ Demo preview — add your eBay API keys in config.json and this section automatically fills with your real, live eBay listings. ★';
+      }
+      if (data.error) { grid.innerHTML = `<p class="loading">${esc(data.error)}</p>`; return; }
+      if (!data.items.length) { grid.innerHTML = '<p class="loading">No active listings right now — check back soon!</p>'; return; }
+      for (const it of data.items) {
+        const media = it.image
+          ? `<img src="${esc(it.image)}" alt="${esc(it.title)}" loading="lazy">`
+          : `<span class="frame"></span><span class="icon">${esc(it.icon || '⭐')}</span>`;
+        const tint = it.tint ? ` style="--imgA:${esc(it.tint)};--imgB:#0c1a26;"` : '';
+        const link = it.url
+          ? `<a href="${esc(it.url)}" target="_blank" rel="noopener">View on eBay</a>`
+          : `<a href="${esc(EBAY_URL)}" target="_blank" rel="noopener">View on eBay</a>`;
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <div class="card-img"${tint}>
+            ${it.condition ? `<span class="badge">${esc(it.condition)}</span>` : ''}
+            ${media}
+          </div>
+          <div class="card-body">
+            <span class="sport">Live eBay Listing</span>
+            <h3>${esc(it.title)}</h3>
+            <div class="card-foot"><span class="price">${money(it.price)}</span>${link}</div>
+          </div>`;
+        grid.appendChild(card);
+      }
+    } catch (e) {
+      grid.innerHTML = '<p class="loading">Could not load listings — is the server running? (python server.py)</p>';
+    }
+  }
+
+  async function loadStore() {
+    const grid = $('storeGrid');
+    try {
+      const data = await (await fetch('/api/store')).json();
+      STORE_ITEMS = data.items;
+      if (!data.stripe_live) {
+        $('storeNote').hidden = false;
+        $('storeNote').textContent = '★ Demo mode — checkout is simulated and no card is ever charged. Add your Stripe key in config.json to accept real payments. ★';
+      }
+      grid.innerHTML = '';
+      for (const it of data.items) {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <div class="card-img" style="--imgA:${esc(it.tint)};--imgB:#0c1a26;">
+            ${it.badge ? `<span class="badge">${esc(it.badge)}</span>` : ''}
+            <span class="frame"></span><span class="icon">${esc(it.icon)}</span>
+          </div>
+          <div class="card-body">
+            <span class="sport">${esc(it.sport)}</span>
+            <h3>${esc(it.title)}</h3>
+            <p class="detail">${esc(it.detail)}</p>
+            <div class="card-foot">
+              <span class="price">${money(it.price)}</span>
+              <a href="#" data-buy="${esc(it.id)}">🛒 Buy Now</a>
+            </div>
+          </div>`;
+        grid.appendChild(card);
+      }
+      grid.querySelectorAll('[data-buy]').forEach(a => a.addEventListener('click', e => {
+        e.preventDefault();
+        buyNow(a.dataset.buy);
+      }));
+    } catch (e) {
+      grid.innerHTML = '<p class="loading">Could not load inventory — is the server running? (python server.py)</p>';
+    }
+  }
+
+  async function buyNow(itemId) {
+    const item = STORE_ITEMS.find(i => i.id === itemId);
+    if (!item) return;
+    try {
+      const r = await (await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ item_id: itemId })
+      })).json();
+      if (r.url) { location.href = r.url; return; }   // live Stripe checkout
+      openShippingModal(item);                         // demo checkout
+    } catch (e) {
+      toast('Checkout is unavailable right now — please try again.');
+    }
+  }
+
+  function openShippingModal(item) {
+    $('modalBody').innerHTML = `
+      <h3>Demo Checkout</h3>
+      <p class="item-line">${esc(item.title)} — ${money(item.price)}<br>
+      <small>(No payment is taken in demo mode. With Stripe connected, buyers pay on Stripe's secure page instead.)</small></p>
+      <div class="form-err" id="formErr"></div>
+      <div class="field"><label>Full Name</label><input id="f_name" autocomplete="name"></div>
+      <div class="field"><label>Street Address</label><input id="f_street1" autocomplete="address-line1"></div>
+      <div class="field"><label>Apt / Suite (optional)</label><input id="f_street2" autocomplete="address-line2"></div>
+      <div class="row2">
+        <div class="field"><label>City</label><input id="f_city" autocomplete="address-level2"></div>
+        <div class="field"><label>State</label><input id="f_state" maxlength="2" placeholder="TX" autocomplete="address-level1"></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label>ZIP Code</label><input id="f_zip" autocomplete="postal-code"></div>
+        <div class="field"><label>Email (optional)</label><input id="f_email" type="email" autocomplete="email"></div>
+      </div>
+      <button class="btn btn-gold" id="placeOrder">Place Demo Order</button>`;
+    $('modal').hidden = false;
+    $('placeOrder').addEventListener('click', () => placeDemoOrder(item));
+  }
+
+  async function placeDemoOrder(item) {
+    const shipping = {
+      name: $('f_name').value, street1: $('f_street1').value, street2: $('f_street2').value,
+      city: $('f_city').value, state: $('f_state').value, zip: $('f_zip').value,
+      email: $('f_email').value, country: 'US'
+    };
+    try {
+      const r = await fetch('/api/demo-checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ item_id: item.id, shipping })
+      });
+      const data = await r.json();
+      if (!r.ok) { $('formErr').textContent = data.error || 'Something went wrong.'; return; }
+      $('modalBody').innerHTML = `
+        <div class="success-box">
+          <div class="big-check">🇺🇸</div>
+          <h3>Order Placed!</h3>
+          <p>${esc(item.title)}</p>
+          <p>A shipping label was generated automatically:</p>
+          <p class="track">Tracking: ${esc(data.tracking)}</p>
+          <a class="btn btn-gold" href="${esc(data.label_url)}" target="_blank" rel="noopener">View Shipping Label</a>
+          <p style="margin-top:1rem"><small>Sellers: see all orders &amp; print labels on the <a href="/orders.html" style="color:var(--gold-bright)">order dashboard</a>.</small></p>
+        </div>`;
+    } catch (e) {
+      $('formErr').textContent = 'Could not reach the server.';
+    }
+  }
+
+  $('modalClose').addEventListener('click', () => { $('modal').hidden = true; });
+  $('modal').addEventListener('click', e => { if (e.target === $('modal')) $('modal').hidden = true; });
+
+  init();
+</script>
+
+</body>
+</html>
