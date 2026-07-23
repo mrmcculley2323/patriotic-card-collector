@@ -276,7 +276,11 @@ def buy_shippo_label(address_to, weight_oz):
     txn, err = http_json("https://api.goshippo.com/transactions",
                          method="POST", headers=headers,
                          body={"rate": cheapest["object_id"],
-                               "label_file_type": "PDF", "async": False})
+                               # PDF_4x6 returns a label sized exactly 4x6in so it
+                               # prints 1:1 on a Rollo (plain "PDF" is a letter-size
+                               # page with the label in a corner, which the printer
+                               # scales down and distorts).
+                               "label_file_type": "PDF_4x6", "async": False})
     if err:
         return None, err
     if txn.get("status") != "SUCCESS":
@@ -432,7 +436,13 @@ class Handler(BaseHTTPRequestHandler):
 .addr{{font-size:1rem;line-height:1.4;white-space:pre-line}}
 .big{{font-size:1.25rem;font-weight:bold}}
 .bars{{margin-top:1rem;height:70px;background:repeating-linear-gradient(90deg,#000 0 3px,#fff 3px 6px,#000 6px 8px,#fff 8px 12px)}}
-.trk{{text-align:center;font-size:.9rem;margin-top:.4rem;letter-spacing:.1em}}</style></head><body>
+.trk{{text-align:center;font-size:.9rem;margin-top:.4rem;letter-spacing:.1em}}
+/* Print 1:1 on a 4x6 Rollo label instead of a scaled letter page. */
+@page{{size:4in 6in;margin:0}}
+@media print{{
+  body{{background:#fff;padding:0;display:block}}
+  .label{{border:0;width:4in;min-height:6in;box-sizing:border-box;padding:0.2in;margin:0}}
+}}</style></head><body>
 <div class="label">
 <div class="demo">DEMO — NOT VALID FOR SHIPPING</div>
 <div class="hdr"><span>USPS GROUND ADVANTAGE</span><span>P</span></div>
