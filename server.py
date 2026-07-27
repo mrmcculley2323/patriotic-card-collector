@@ -276,7 +276,7 @@ def buy_shippo_label(address_to, weight_oz):
     txn, err = http_json("https://api.goshippo.com/transactions",
                          method="POST", headers=headers,
                          body={"rate": cheapest["object_id"],
-                               "label_file_type": "PDF", "async": False})
+                               "label_file_type": "PDF_4x6", "async": False})
     if err:
         return None, err
     if txn.get("status") != "SUCCESS":
@@ -424,8 +424,13 @@ class Handler(BaseHTTPRequestHandler):
         s, f = order["shipping"], CFG["SHIP_FROM"]
         html = f"""<!DOCTYPE html><html><head><meta charset="utf-8">
 <title>Demo Shipping Label</title>
-<style>body{{font-family:Arial,sans-serif;background:#eee;display:flex;justify-content:center;padding:2rem}}
-.label{{background:#fff;border:3px solid #000;width:384px;padding:1.2rem}}
+<style>@page{{size:4in 6in;margin:0}}
+body{{font-family:Arial,sans-serif;background:#eee;display:flex;justify-content:center;padding:2rem}}
+.label{{background:#fff;border:3px solid #000;width:384px;padding:1.2rem;box-sizing:border-box}}
+@media print{{
+  html,body{{background:#fff;margin:0;padding:0}}
+  .label{{width:4in;height:6in;border:none;padding:.2in;margin:0}}
+}}
 .hdr{{display:flex;justify-content:space-between;border-bottom:3px solid #000;padding-bottom:.5rem;margin-bottom:.7rem;font-weight:bold}}
 .demo{{background:#c00;color:#fff;text-align:center;font-weight:bold;padding:.3rem;margin-bottom:.7rem;letter-spacing:.2em}}
 .sec{{font-size:.75rem;color:#444;text-transform:uppercase;margin-top:.8rem}}
