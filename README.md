@@ -58,8 +58,38 @@ Stripe's standard fee is ~2.9% + 30¢ per sale.
 4. Put your real return address in `SHIP_FROM`.
 
 When a Stripe payment completes, the server automatically buys the cheapest
-USPS label for the buyer's address and saves the PDF link + tracking number to
-the order dashboard — just open `/orders.html` and hit Print Label.
+USPS label for the buyer's address and saves the label + tracking number to
+the order dashboard — just open `/orders.html` and hit **Print 4×6 Label**.
+
+## Printing 4×6 labels on a Rollo
+
+Labels are generated at a native **4×6 in** size and the **Print 4×6 Label**
+button opens a dedicated print page (`/print/<order_id>`) that forces a
+`4in × 6in` page with **zero margins** and stretches the label to fill the
+whole sheet, then opens the print dialog for you. That means the label maps
+1:1 onto the Rollo's printable area — no manual cropping or resizing per order.
+
+One-time computer setup so it "just works" every time:
+
+1. **Install the Rollo driver** from https://www.rollo.com/setup and plug the
+   printer in. It should appear as *Rollo Printer* (or *Rollo X10xx*).
+2. **Set the media/label size to 4×6:**
+   - **Windows:** Settings → Bluetooth & devices → Printers → Rollo →
+     Printing preferences → set **Paper size = 4" × 6"** (or *100mm × 150mm*).
+   - **macOS:** System Settings → Printers & Scanners → Rollo → the paper size
+     `4 x 6` is selected automatically in the print dialog.
+3. In the browser print dialog that pops up, confirm:
+   - **Destination / Printer:** Rollo
+   - **Paper size:** 4 × 6 in
+   - **Margins:** None (or Default)
+   - **Scale:** 100% / **Actual size** — *not* "Fit to page shrink"
+   - **Background graphics: ON** (so the barcode/label art prints)
+4. Print one label, then check **"Use these settings by default"** /
+   save them as the default — after that every label prints edge-to-edge with
+   one click.
+
+> Tip: make the Rollo your **default printer** if you only use it for labels,
+> so you don't have to pick it each time.
 
 ## Your inventory
 

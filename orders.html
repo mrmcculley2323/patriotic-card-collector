@@ -70,7 +70,7 @@ async function loadOrders(){
         </div>
         <div class="addr">${esc(s.name)}\n${esc(s.street1)}${s.street2 ? '\n' + esc(s.street2) : ''}\n${esc(s.city)}, ${esc(s.state)} ${esc(s.zip)}${s.email ? '\n' + esc(s.email) : ''}</div>
         <div class="actions">
-          ${label.label_url ? `<a href="${esc(label.label_url)}" target="_blank" rel="noopener">🖨️ Print Label</a>` : ''}
+          ${label.label_url ? `<a href="/print/${esc(o.id)}" target="_blank" rel="noopener">🖨️ Print 4×6 Label</a>` : ''}
           ${label.tracking_number ? `<span class="track">${esc(label.tracking_number)}</span>` : ''}
           ${label.service ? `<span class="meta">${esc(label.carrier)} — ${esc(label.service)} ($${esc(String(label.label_cost))})</span>` : ''}
           ${label.error ? `<span class="err" style="font-size:.75rem;max-width:220px">${esc(label.error)}</span>` : ''}
