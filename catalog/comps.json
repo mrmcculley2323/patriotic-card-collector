@@ -5,9 +5,9 @@
   "note": "PSA 10 Rookie Debut Auto last sold ~$383"
  },
  "IMG_4824:6": {
-  "comp": 260,
-  "source": "eBay / SI",
-  "note": "SGC 8; Pro 8.5 sold $266, raw $171 - est SGC8 ~$250-275"
+  "comp": 1500,
+  "source": "eBay / Steel City / SCI",
+  "note": "CORRECTED UP: PSA 8.5 sold ~$3,600; SGC 8 dealer-listed ~$2,499. SGC 8 realistic sold ~$1,300-1,900."
  },
  "IMG_4850:1": {
   "comp": 25,
@@ -30,9 +30,9 @@
   "note": "Raw #R12 last sold ~$24"
  },
  "IMG_4827:5": {
-  "comp": 175,
-  "source": "Goldin / PSA APR",
-  "note": "Kaboom Gold /10 PSA 8 - thin comps; Goldin has sold examples, rare parallel"
+  "comp": 2000,
+  "source": "Goldin / eBay",
+  "note": "Base Kaboom sells $435-1000; Gold /10 is top parallel, big premium. Goldin has a sold 04/10 PSA 8 - confirm exact figure. Est $1500-2500."
  },
  "IMG_4814:1": {
   "comp": 95,
@@ -85,8 +85,23 @@
   "note": "Cosmic AA-2 SGC 9 thin; ~$50-70"
  },
  "IMG_4826:6": {
-  "comp": 40,
+  "comp": 125,
   "source": "eBay",
-  "note": "VERIFY: Airborne is normally a NON-AUTO insert (~$20-40 raw). If not actually an auto, far below $390 sticker - recheck the card"
+  "note": "Airborne Signatures /99 auto listings $50-225. Sticker $390 is HIGH; realistic ~$100-150."
+ },
+ "IMG_4827:1": {
+  "comp": 400,
+  "source": "Pristine Marketplace / eBay",
+  "note": "2009-10 Studio RC #129 signed. BAS-certified copies ~$300-600; generic coin COA less. NOT a pack-pulled certified auto (those $5k+). Verify the authenticator on the coin."
+ },
+ "IMG_4826:4": {
+  "comp": 1000,
+  "source": "n/a - true 1/1",
+  "note": "Dual HOF QB (Namath/Elway) auto 1/1 cyan printing plate. No direct comp; auction-dependent. Could reach 4 figures; 1/1 plates can also underperform. Test at auction."
+ },
+ "IMG_4830:4": {
+  "comp": 800,
+  "source": "n/a - true 1/1",
+  "note": "Cam Smith Topps Transcendent 'Double' RC on-card auto 1/1. Ultra-premium product; auction-dependent. Rookie value speculative - could exceed if he breaks out."
  }
 }
