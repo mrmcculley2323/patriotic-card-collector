@@ -5,8 +5,8 @@
 - Data is appended to catalog/cards.jsonl (one JSON object per card).
 
 ## Resume pointer
-- LAST PHOTO CATALOGED: IMG_4919
-- NEXT PHOTO TO DO: IMG_4920
+- LAST PHOTO CATALOGED: IMG_4929
+- NEXT PHOTO TO DO: IMG_4930
 - To resume: read next images/jpg/IMG_####.jpg, append records to cards.jsonl, commit.
 
 ## Key flags found so far
