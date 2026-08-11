@@ -1,10 +1,13 @@
-import json
-d=json.load(open('catalog/_artifact_data.json'))
+import json,sys
+INP=sys.argv[1] if len(sys.argv)>1 else 'catalog/_artifact_data.json'
+OUT=sys.argv[2] if len(sys.argv)>2 else 'catalog/inventory.html'
+TITLE=sys.argv[3] if len(sys.argv)>3 else 'Sport Card Entire Lot'
+d=json.load(open(INP))
 DATA=json.dumps(d, separators=(',',':'))
 head='''<div class="wrap">
 <header class="masthead"><div class="crest">LOT&nbsp;01</div>
-<div class="mh-title"><h1>Sport Card Entire Lot &mdash; Master Inventory</h1>
-<p class="sub">726 cards from 138 photos &middot; ranked by value &middot; top tier priced on real sold comps</p></div></header>
+<div class="mh-title"><h1>'''+TITLE+'''</h1>
+<p class="sub">'''+str(d['stats']['total'])+''' cards &middot; ranked by value &middot; top tier priced on real sold comps</p></div></header>
 <section class="tiles" id="tiles"></section><div class="flagbar" id="flagbar"></div>
 <section class="panel"><div class="controls"><input id="q" type="search" placeholder="Search player, set, team, brand&hellip;" autocomplete="off" />
 <div class="chips" id="filters"></div></div><div class="tablewrap"><table id="tbl"><thead><tr>
@@ -74,5 +77,5 @@ return `<tr><td class="num">${c.r}</td><td class="num val"${tip}>$${Math.round(c
 const sv=rows.reduce((s,c)=>s+c.v,0);document.getElementById("count").innerHTML=`Showing <b>${rows.length}</b> of ${C.length} &middot; subtotal <b>${money(sv)}</b>`;}
 function esc(s){return(""+s).replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]))}render();
 '''
-open('catalog/inventory.html','w').write(head+"\n<style>"+css+"</style>\n<script>"+js.replace("__DATA__",DATA)+"</script>")
+open(OUT,'w').write(head+"\n<style>"+css+"</style>\n<script>"+js.replace("__DATA__",DATA)+"</script>")
 print("inventory.html rebuilt")
