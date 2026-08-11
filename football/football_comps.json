@@ -145,5 +145,54 @@
   "source": "eBay",
   "conf": "low",
   "note": "Chrome RC auto Blue /150 - no exact; starting RB rookie auto ~$40-70"
+ },
+ "IMG_4895:1": {
+  "comp": 60,
+  "date": "2023",
+  "source": "eBay/SportsCardsPro",
+  "conf": "low",
+  "note": "Origins Rookie Auto base $35-172 range; Red /75 higher. ~$50-80"
+ },
+ "IMG_4900:2": {
+  "comp": 60,
+  "date": "2023",
+  "source": "eBay",
+  "conf": "low",
+  "note": "Black Futuristic jersey /99 - no exact; Black /150 comps ~$40-80"
+ },
+ "IMG_4895:2": {
+  "comp": 120,
+  "date": "2025",
+  "source": "eBay/NFLShop",
+  "conf": "low",
+  "note": "Phoenix Dual RPA base /249; Jeanty RPAs $80-200+ by parallel (Origins /23 asking $399). Hyped #6 RB rookie"
+ },
+ "IMG_4822:1": {
+  "comp": 200,
+  "date": "2025",
+  "source": "CollectibleXchange/eBay",
+  "conf": "med",
+  "note": "PSA 10 retail listing $240; recent sold ~$180-230"
+ },
+ "IMG_4845:5": {
+  "comp": 25,
+  "date": "2024",
+  "source": "Whatnot/eBay",
+  "conf": "low",
+  "note": "NT Century Materials jersey /49 (non-auto); veteran star modest ~$15-30"
+ },
+ "IMG_4832:5": {
+  "comp": 25,
+  "date": "2022",
+  "source": "SportsCardsPro",
+  "conf": "low",
+  "note": "Illusions Rookie Vision Sig - role WR rookie auto ~$15-40"
+ },
+ "IMG_4845:2": {
+  "comp": 35,
+  "date": "2025",
+  "source": "eBay",
+  "conf": "low",
+  "note": "Chrome RC auto RA-OH /499; 1st-rd RB base auto ~$25-50"
  }
 }
