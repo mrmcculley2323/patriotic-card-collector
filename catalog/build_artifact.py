@@ -72,7 +72,7 @@ function pass(c){if(filt==="comp"&&c.b!=="comp")return false;if(filt==="sticker"
 function render(){let rows=C.filter(pass);rows.sort((a,b)=>{let x=a[sortK],y=b[sortK];if(sortK==="v"||sortK==="r"){x=+x;y=+y}else{x=(""+x).toLowerCase();y=(""+y).toLowerCase()}return x<y?-1*sortDir:x>y?1*sortDir:0;});
 document.getElementById("rows").innerHTML=rows.map(c=>{const pills=(c.au==="Y"?'<span class="pill au">AUTO</span>':'')+(c.nt.includes("FLAG")?'<span class="pill fl">CUSTOM</span>':(c.nm==="Y"?'<span class="pill nm">CHECK</span>':''));
 const setc=`<b>${esc(c.br)}</b>${c.s?" &middot; "+esc(c.s):""}`;const par=[c.pa,c.sn?("#"+c.sn):"",c.cn?("No."+c.cn):""].filter(Boolean).join(" &middot; ");
-const tip=c.b==="comp"?` title="Comp: ${esc(c.cnote)}"`:(c.b==="sticker"?' title="Your sticker price"':' title="Estimate"');
+const tip=c.b==="comp"?` title="Comp $${Math.round(c.v)} (${esc(c.dt||'')}, conf: ${esc(c.cf||'')}) — ${esc(c.cnote)}"`:(c.b==="sticker"?' title="Your sticker price"':' title="Estimate (not yet comped)"');
 return `<tr><td class="num">${c.r}</td><td class="num val"${tip}>$${Math.round(c.v)}<span class="bdot ${c.b}"></span></td><td class="player">${esc(c.p)}${pills}</td><td>${esc(c.yr)}</td><td class="setcell">${setc}</td><td>${par||"&mdash;"}</td><td>${c.g?esc(c.g):"&mdash;"}</td><td>${esc(c.tm)}</td><td class="num">${c.ph.replace("IMG_","")}</td></tr>`}).join("");
 const sv=rows.reduce((s,c)=>s+c.v,0);document.getElementById("count").innerHTML=`Showing <b>${rows.length}</b> of ${C.length} &middot; subtotal <b>${money(sv)}</b>`;}
 function esc(s){return(""+s).replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]))}render();
