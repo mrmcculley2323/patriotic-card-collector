@@ -6,6 +6,16 @@
   "EBAY_CLIENT_SECRET": "",
   "EBAY_SEARCH_QUERY": "card",
 
+  "_scout": "Deal Scout — continuously hunts undervalued sealed boxes, memorabilia, and card lots. Uses your eBay keys above (EBAY_SELLER_USERNAME is NOT required for scouting). Edit watchlist.json to change what it searches for.",
+  "SCOUT_AUTOSTART": true,
+  "SCOUT_INTERVAL_MIN": 30,
+  "SCOUT_MIN_DISCOUNT": 0.25,
+  "SCOUT_MIN_COMPS": 4,
+  "SCOUT_MIN_PRICE": 8,
+  "SCOUT_AUCTION_WINDOW_HOURS": 12,
+  "SCOUT_PER_QUERY_LIMIT": 100,
+  "SCOUT_RETENTION_DAYS": 14,
+
   "STRIPE_SECRET_KEY": "",
   "STRIPE_WEBHOOK_SECRET": "",
 

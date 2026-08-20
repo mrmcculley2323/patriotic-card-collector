@@ -8,6 +8,11 @@ services:
     envVars:
       - key: EBAY_SELLER_USERNAME
         value: mrmcculley23
+      # Deal Scout tuning (safe defaults — change anytime in the dashboard)
+      - key: SCOUT_INTERVAL_MIN
+        value: "30"
+      - key: SCOUT_MIN_DISCOUNT
+        value: "0.25"
       - key: ADMIN_KEY
         sync: false
       - key: SITE_URL

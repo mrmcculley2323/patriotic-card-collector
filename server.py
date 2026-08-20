@@ -32,6 +32,8 @@ import urllib.request
 import uuid
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
+import scout  # deal-finding engine (see scout.py)
+
 SITE_DIR = os.path.dirname(os.path.abspath(__file__))
 CONFIG_PATH = os.path.join(SITE_DIR, "config.json")
 INVENTORY_PATH = os.path.join(SITE_DIR, "inventory.json")
@@ -345,7 +347,7 @@ class Handler(BaseHTTPRequestHandler):
         if path == "/":
             path = "/index.html"
         safe = os.path.normpath(path.lstrip("/"))
-        if safe.startswith(("..", os.sep)) or safe in ("config.json", "orders.json", "server.py"):
+        if safe.startswith(("..", os.sep)) or safe in ("config.json", "orders.json", "deals.json", "server.py"):
             self.send_json({"error": "not found"}, 404)
             return
         full = os.path.join(SITE_DIR, safe)
@@ -399,6 +401,23 @@ class Handler(BaseHTTPRequestHandler):
         if path == "/api/store":
             self.send_json({"stripe_live": stripe_live(),
                             "items": read_inventory()})
+            return
+
+        if path == "/api/scout/status":
+            self.send_json(scout.get_status())
+            return
+
+        if path == "/api/deals":
+            self.send_json({
+                "mode": scout.get_status()["mode"],
+                "deals": scout.get_deals(
+                    category=qs.get("category", ["all"])[0],
+                    sport=qs.get("sport", ["all"])[0],
+                    min_disc=qs.get("min_discount", [None])[0],
+                    source=qs.get("source", ["all"])[0],
+                    limit=int(qs.get("limit", ["200"])[0]),
+                ),
+            })
             return
 
         if path == "/api/orders":
@@ -459,6 +478,12 @@ class Handler(BaseHTTPRequestHandler):
         path = urllib.parse.urlparse(self.path).path
         raw = self.read_body()
 
+        if path == "/api/scout/scan":
+            started = scout.trigger_scan_async()
+            self.send_json({"started": started,
+                            "message": "Scan started." if started
+                            else "A scan is already running."})
+            return
         if path == "/api/checkout":
             self.handle_checkout(raw)
         elif path == "/api/demo-checkout":
@@ -559,4 +584,8 @@ if __name__ == "__main__":
     print(f"  eBay listings : {'LIVE' if ebay_live() else 'DEMO (add eBay keys)'}")
     print(f"  Stripe payments: {'LIVE' if stripe_live() else 'DEMO (add Stripe key)'}")
     print(f"  Shippo labels : {'LIVE' if shippo_live() else 'DEMO (add Shippo key)'}")
+    print(f"  Deal Scout    : {'LIVE eBay scan' if ebay_live() else 'DEMO (add eBay keys)'}"
+          f" every {scout.interval_min()} min")
+    scout.init(CFG, http_json, ebay_get_token, ebay_live)
+    scout.start()
     ThreadingHTTPServer((HOST, PORT), Handler).serve_forever()

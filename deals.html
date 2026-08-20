@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deal Scout — Patriotic Card Collector</title>
+<meta name="description" content="Continuously scans online listings for undervalued sealed sports-card boxes, memorabilia, and card lots — the best buying opportunities, ranked by discount.">
+<style>
+  :root{
+    --navy:#0b1f3a;--navy-deep:#071527;--red:#a91e22;--red-bright:#c8342f;
+    --gold:#d4a53f;--gold-bright:#f0c96b;--cream:#f4ead2;--parchment:#e9dcbd;
+    --ink:#1a1a1a;--green:#3f9d5a;--green-bright:#5fce7f;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{font-family:Georgia,'Times New Roman',serif;background:var(--navy-deep);color:var(--cream);line-height:1.6;}
+  h1,h2,h3,h4{font-family:'Trebuchet MS','Arial Black',Impact,sans-serif;letter-spacing:.03em;}
+  a{color:var(--gold-bright);}
+
+  /* nav */
+  nav{position:sticky;top:0;z-index:50;background:rgba(7,21,39,.96);backdrop-filter:blur(6px);
+      border-bottom:1px solid rgba(212,165,63,.4);display:flex;align-items:center;justify-content:space-between;padding:.7rem 5vw;}
+  .brand{display:flex;align-items:center;gap:.7rem;text-decoration:none;}
+  .brand-mark{width:44px;height:44px;flex:0 0 44px;border-radius:50%;
+      background:radial-gradient(circle at 35% 30%,var(--gold-bright),var(--gold) 55%,#8a6420);
+      display:flex;align-items:center;justify-content:center;font-size:1.5rem;
+      box-shadow:0 0 0 2px var(--navy-deep),0 0 0 3.5px var(--gold);}
+  .brand-name{color:var(--cream);font-family:'Trebuchet MS',sans-serif;font-weight:700;font-size:1.05rem;line-height:1.15;text-transform:uppercase;letter-spacing:.06em;}
+  .brand-name small{display:block;color:var(--gold);font-size:.62rem;letter-spacing:.28em;font-weight:400;}
+  nav ul{display:flex;gap:1.6rem;list-style:none;}
+  nav ul a{color:var(--cream);text-decoration:none;font-family:'Trebuchet MS',sans-serif;font-size:.85rem;
+      text-transform:uppercase;letter-spacing:.12em;padding-bottom:.2rem;border-bottom:2px solid transparent;transition:.2s;}
+  nav ul a:hover,nav ul a.active{color:var(--gold-bright);border-bottom-color:var(--red-bright);}
+  @media(max-width:760px){nav ul{display:none;}}
+
+  /* hero */
+  header.hero{position:relative;overflow:hidden;text-align:center;padding:3.2rem 5vw 2.6rem;border-bottom:4px solid var(--gold);
+      background:radial-gradient(ellipse 80% 60% at 50% -10%,rgba(200,52,47,.35),transparent 60%),
+                 linear-gradient(180deg,#12294a 0%,var(--navy) 45%,var(--navy-deep) 100%);}
+  .hero-emblem{width:82px;height:82px;margin:0 auto 1rem;border-radius:50%;
+      background:radial-gradient(circle at 35% 30%,var(--gold-bright),var(--gold) 55%,#8a6420);
+      display:flex;align-items:center;justify-content:center;font-size:2.4rem;
+      box-shadow:0 0 0 4px var(--navy-deep),0 0 0 7px var(--gold),0 12px 40px rgba(0,0,0,.6);}
+  .hero h1{font-size:clamp(2rem,5vw,3.4rem);text-transform:uppercase;line-height:1.05;
+      background:linear-gradient(180deg,#fdf3d7 20%,var(--gold-bright) 55%,#b98a2e 90%);
+      -webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 3px 18px rgba(0,0,0,.45);}
+  .hero p.tag{margin:.9rem auto 0;max-width:640px;color:#cdd8e6;font-style:italic;font-size:1.02rem;}
+
+  /* status bar */
+  .statusbar{max-width:1180px;margin:1.6rem auto 0;padding:0 5vw;display:flex;flex-wrap:wrap;gap:1rem;align-items:stretch;justify-content:center;}
+  .stat{background:rgba(244,234,210,.06);border:1px solid rgba(212,165,63,.35);border-radius:8px;padding:.7rem 1.1rem;min-width:130px;text-align:center;}
+  .stat .k{font-family:'Trebuchet MS',sans-serif;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);}
+  .stat .v{font-family:'Trebuchet MS',sans-serif;font-size:1.15rem;font-weight:700;color:var(--cream);margin-top:.15rem;}
+  .pill{display:inline-flex;align-items:center;gap:.4rem;font-family:'Trebuchet MS',sans-serif;font-size:.72rem;font-weight:700;
+      text-transform:uppercase;letter-spacing:.12em;padding:.2rem .7rem;border-radius:999px;}
+  .pill.live{background:rgba(63,157,90,.2);color:var(--green-bright);border:1px solid var(--green);}
+  .pill.demo{background:rgba(200,52,47,.18);color:#f0a6a2;border:1px solid var(--red-bright);}
+  .dot{width:8px;height:8px;border-radius:50%;background:currentColor;box-shadow:0 0 8px currentColor;}
+  .dot.spin{animation:pulse 1s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:.3;}50%{opacity:1;}}
+
+  /* controls */
+  .controls{max-width:1180px;margin:2rem auto 0;padding:0 5vw;display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;justify-content:center;}
+  .chip{font-family:'Trebuchet MS',sans-serif;font-size:.76rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;
+      color:var(--cream);background:rgba(244,234,210,.07);border:1px solid rgba(212,165,63,.45);border-radius:999px;
+      padding:.42rem 1.05rem;cursor:pointer;transition:.2s;}
+  .chip:hover{background:rgba(212,165,63,.18);}
+  .chip.active{background:linear-gradient(180deg,var(--gold-bright),var(--gold));color:var(--navy-deep);border-color:var(--gold);}
+  select{font-family:'Trebuchet MS',sans-serif;font-size:.76rem;background:var(--navy);color:var(--cream);
+      border:1px solid rgba(212,165,63,.45);border-radius:6px;padding:.42rem .7rem;}
+  .btn{display:inline-flex;align-items:center;gap:.45rem;text-decoration:none;cursor:pointer;font-family:'Trebuchet MS',sans-serif;font-weight:700;
+      text-transform:uppercase;letter-spacing:.1em;font-size:.78rem;padding:.6rem 1.3rem;border-radius:5px;border:2px solid transparent;transition:.2s;}
+  .btn-gold{background:linear-gradient(180deg,var(--gold-bright),var(--gold));color:var(--navy-deep);box-shadow:0 5px 16px rgba(212,165,63,.3);}
+  .btn-gold:hover{transform:translateY(-2px);}
+  .btn-gold[disabled]{opacity:.55;cursor:wait;transform:none;}
+
+  /* grid */
+  main{max-width:1180px;margin:0 auto;padding:2.4rem 5vw 5rem;}
+  .meta-line{text-align:center;color:#9fb0c4;font-size:.85rem;margin-bottom:1.6rem;font-family:'Trebuchet MS',sans-serif;letter-spacing:.05em;}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1.4rem;}
+  .card{position:relative;background:linear-gradient(180deg,#0e2440,#0a1c33);border:1px solid rgba(212,165,63,.3);
+      border-radius:12px;overflow:hidden;display:flex;flex-direction:column;transition:.2s;}
+  .card:hover{transform:translateY(-3px);border-color:var(--gold);box-shadow:0 12px 30px rgba(0,0,0,.5);}
+  .thumb{height:150px;background:#0a1728;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;}
+  .thumb img{width:100%;height:100%;object-fit:cover;}
+  .thumb .icon{font-size:3.4rem;}
+  .disc-badge{position:absolute;top:.6rem;right:.6rem;background:linear-gradient(180deg,var(--green-bright),var(--green));
+      color:#062012;font-family:'Trebuchet MS',sans-serif;font-weight:800;font-size:1rem;padding:.3rem .7rem;border-radius:8px;
+      box-shadow:0 3px 10px rgba(0,0,0,.4);letter-spacing:.02em;}
+  .src-badge{position:absolute;top:.6rem;left:.6rem;font-family:'Trebuchet MS',sans-serif;font-size:.6rem;font-weight:700;
+      text-transform:uppercase;letter-spacing:.1em;background:rgba(7,21,39,.85);color:var(--gold);padding:.22rem .55rem;border-radius:6px;border:1px solid rgba(212,165,63,.4);}
+  .auction-flag{position:absolute;bottom:.6rem;left:.6rem;font-family:'Trebuchet MS',sans-serif;font-size:.62rem;font-weight:700;
+      text-transform:uppercase;letter-spacing:.08em;background:var(--red);color:var(--cream);padding:.22rem .55rem;border-radius:6px;}
+  .body{padding:.9rem 1rem 1.1rem;display:flex;flex-direction:column;flex:1;}
+  .cat-tag{font-family:'Trebuchet MS',sans-serif;font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:.3rem;}
+  .card h3{font-size:.98rem;line-height:1.3;color:var(--cream);margin-bottom:.55rem;font-family:'Trebuchet MS',sans-serif;
+      display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.55em;}
+  .price-row{display:flex;align-items:baseline;gap:.6rem;margin-bottom:.35rem;}
+  .price{font-size:1.5rem;font-weight:800;color:var(--gold-bright);font-family:'Trebuchet MS',sans-serif;}
+  .ref{font-size:.85rem;color:#8fa0b6;text-decoration:line-through;}
+  .savings{font-family:'Trebuchet MS',sans-serif;font-size:.8rem;color:var(--green-bright);letter-spacing:.03em;margin-bottom:.5rem;}
+  .sub{font-size:.74rem;color:#9fb0c4;margin-bottom:.2rem;font-family:'Trebuchet MS',sans-serif;}
+  .conf{font-size:.68rem;color:#7d8da0;font-family:'Trebuchet MS',sans-serif;font-style:italic;margin-top:.15rem;}
+  .card-foot{margin-top:auto;padding-top:.8rem;display:flex;gap:.5rem;}
+  .card-foot .btn{flex:1;justify-content:center;font-size:.72rem;padding:.55rem .6rem;}
+  .btn-view{background:linear-gradient(180deg,var(--red-bright),var(--red));color:var(--cream);}
+  .btn-view:hover{transform:translateY(-2px);}
+  .empty{text-align:center;padding:4rem 1rem;color:#9fb0c4;}
+  .empty .big{font-size:2.4rem;margin-bottom:.6rem;}
+  .countdown{font-variant-numeric:tabular-nums;}
+
+  footer{background:var(--navy-deep);border-top:1px solid rgba(212,165,63,.3);padding:2rem 5vw;text-align:center;color:#8fa0b6;font-size:.8rem;}
+  .disclaimer{max-width:820px;margin:1.4rem auto 0;font-size:.74rem;color:#7d8da0;line-height:1.6;}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="brand" href="/">
+    <span class="brand-mark">🦅</span>
+    <span class="brand-name">Patriotic Card Collector<small>Deal Scout</small></span>
+  </a>
+  <ul>
+    <li><a href="/">Storefront</a></li>
+    <li><a href="/deals.html" class="active">Deal Scout</a></li>
+    <li><a href="/orders.html">Orders</a></li>
+  </ul>
+</nav>
+
+<header class="hero">
+  <div class="hero-emblem">🔎</div>
+  <h1>The Deal Scout</h1>
+  <p class="tag">Around the clock, we scan the marketplace for sealed boxes, memorabilia,
+     and card lots priced below what the market is asking — so you find the buys before anyone else.</p>
+
+  <div class="statusbar" id="statusbar"></div>
+</header>
+
+<div class="controls" id="controls">
+  <button class="btn btn-gold" id="scanBtn">⚡ Scan now</button>
+  <div style="display:flex;gap:.4rem;flex-wrap:wrap" id="catChips"></div>
+  <select id="sportSel" title="Sport">
+    <option value="all">All sports</option>
+    <option>Baseball</option><option>Basketball</option><option>Football</option>
+    <option>Hockey</option><option>Soccer</option><option>Mixed</option>
+  </select>
+  <select id="discSel" title="Minimum discount">
+    <option value="0">Any discount</option>
+    <option value="20">20%+ off</option>
+    <option value="30">30%+ off</option>
+    <option value="40">40%+ off</option>
+    <option value="50">50%+ off</option>
+  </select>
+  <select id="sortSel" title="Sort">
+    <option value="score">Best deals</option>
+    <option value="discount">Biggest % off</option>
+    <option value="savings">Most $ saved</option>
+    <option value="ending">Ending soonest</option>
+  </select>
+</div>
+
+<main>
+  <div class="meta-line" id="metaLine">Loading opportunities…</div>
+  <div class="grid" id="grid"></div>
+</main>
+
+<footer>
+  <p>🇺🇸 Patriotic Card Collector — Deal Scout scans public marketplace listings to surface buying opportunities.</p>
+  <p class="disclaimer">
+    <b>How we value deals:</b> for each saved search the Scout builds a reference price from the median
+    Buy-It-Now asking price of comparable current listings, then flags items priced well below it.
+    Auctions appear only when they're ending soon and the current bid is still under reference.
+    This is a market-asking proxy, not a guarantee of resale value — always read the listing, check the
+    seller, and confirm condition and authenticity before buying. Edit <code>watchlist.json</code> to
+    change what the Scout hunts for.
+  </p>
+</footer>
+
+<script>
+const CATEGORIES = [
+  {key:"all", label:"All"},
+  {key:"sealed_box", label:"Sealed Boxes"},
+  {key:"card_lot", label:"Card Lots"},
+  {key:"memorabilia", label:"Memorabilia"},
+  {key:"single_card", label:"Singles"},
+];
+const CAT_LABEL = Object.fromEntries(CATEGORIES.map(c=>[c.key,c.label]));
+const ICON = {sealed_box:"📦", card_lot:"🗃️", memorabilia:"🏅", single_card:"🎴"};
+
+let state = {category:"all", sport:"all", min:"0", sort:"score", deals:[], mode:"demo"};
+
+function buildChips(){
+  const wrap = document.getElementById("catChips");
+  wrap.innerHTML = "";
+  CATEGORIES.forEach(c=>{
+    const b = document.createElement("button");
+    b.className = "chip" + (state.category===c.key?" active":"");
+    b.textContent = c.label;
+    b.onclick = ()=>{ state.category=c.key; buildChips(); load(); };
+    wrap.appendChild(b);
+  });
+}
+
+function money(v, cur){ if(v==null) return "—"; return (cur&&cur!=="USD"?cur+" ":"$")+Number(v).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}); }
+
+function countdown(end){
+  if(!end) return "";
+  const s = end - Date.now()/1000;
+  if(s<=0) return "ended";
+  const h = Math.floor(s/3600), m = Math.floor((s%3600)/60);
+  return h>0 ? `${h}h ${m}m left` : `${m}m left`;
+}
+
+async function loadStatus(){
+  try{
+    const r = await fetch("/api/scout/status"); const s = await r.json();
+    state.mode = s.mode;
+    const live = s.mode==="live";
+    const scanning = s.scanning_now;
+    document.getElementById("statusbar").innerHTML = `
+      <div class="stat"><div class="k">Source</div><div class="v">
+        <span class="pill ${live?'live':'demo'}"><span class="dot ${scanning?'spin':''}"></span>${live?'Live eBay':'Demo'}</span></div></div>
+      <div class="stat"><div class="k">Active deals</div><div class="v">${s.active_deals??0}</div></div>
+      <div class="stat"><div class="k">Watchlist</div><div class="v">${s.watchlist_size??0} searches</div></div>
+      <div class="stat"><div class="k">Scan interval</div><div class="v">${s.interval_min} min</div></div>
+      <div class="stat"><div class="k">Min discount</div><div class="v">${Math.round(s.min_discount*100)}%</div></div>
+      <div class="stat"><div class="k">Last scan</div><div class="v" style="font-size:.82rem">${scanning?'scanning…':(s.last_run||'—')}</div></div>`;
+  }catch(e){ /* leave prior state */ }
+}
+
+async function load(){
+  const p = new URLSearchParams({category:state.category, sport:state.sport, min_discount:state.min, limit:"200"});
+  try{
+    const r = await fetch("/api/deals?"+p.toString());
+    const data = await r.json();
+    state.deals = data.deals||[];
+    state.mode = data.mode||state.mode;
+  }catch(e){ state.deals=[]; }
+  render();
+}
+
+function sortDeals(deals){
+  const s = state.sort;
+  const arr = [...deals];
+  if(s==="discount") arr.sort((a,b)=>(b.discount||0)-(a.discount||0));
+  else if(s==="savings") arr.sort((a,b)=>(b.est_savings||0)-(a.est_savings||0));
+  else if(s==="ending") arr.sort((a,b)=>(a.end_time||9e15)-(b.end_time||9e15));
+  else arr.sort((a,b)=>(b.score||0)-(a.score||0));
+  return arr;
+}
+
+function render(){
+  const grid = document.getElementById("grid");
+  const deals = sortDeals(state.deals);
+  const meta = document.getElementById("metaLine");
+  if(!deals.length){
+    grid.innerHTML = "";
+    document.querySelector(".empty")?.remove();
+    const d = document.createElement("div");
+    d.className="empty"; d.innerHTML = `<div class="big">🔭</div>
+      <p>No deals match these filters yet.</p>
+      <p style="font-size:.85rem;margin-top:.5rem">Try widening the filters or hit <b>Scan now</b> to sweep the marketplace again.</p>`;
+    grid.after(d);
+    meta.textContent = state.mode==="demo"
+      ? "Running in demo mode — add eBay keys to scan live listings."
+      : "Scanning live eBay listings.";
+    return;
+  }
+  document.querySelector(".empty")?.remove();
+  meta.textContent = `${deals.length} opportunit${deals.length===1?'y':'ies'} found`
+    + (state.mode==="demo"?" · demo mode (add eBay keys for live results)":" · scanning live eBay");
+  grid.innerHTML = deals.map(cardHTML).join("");
+}
+
+function cardHTML(d){
+  const disc = Math.round((d.discount||0)*100);
+  const img = d.image ? `<img src="${d.image}" alt="" loading="lazy" onerror="this.style.display='none';this.parentNode.querySelector('.icon').style.display='flex'">` : "";
+  const icon = `<span class="icon" style="${d.image?'display:none':''}">${d.icon||ICON[d.category]||"🎴"}</span>`;
+  const auction = d.is_auction
+    ? `<span class="auction-flag">⏳ Auction · <span class="countdown" data-end="${d.end_time||''}">${countdown(d.end_time)}</span></span>` : "";
+  const conf = d.source==="demo"
+    ? `<div class="conf">Demo listing</div>`
+    : (d.confidence>0
+        ? `<div class="conf">Ref. from ${d.confidence} comparable listing${d.confidence===1?'':'s'}</div>`
+        : `<div class="conf">Ref. from saved anchor price</div>`);
+  return `<div class="card">
+    <div class="thumb">${img}${icon}
+      <span class="src-badge">${d.source}</span>
+      <span class="disc-badge">-${disc}%</span>
+      ${auction}
+    </div>
+    <div class="body">
+      <div class="cat-tag">${CAT_LABEL[d.category]||d.category} · ${d.sport||""}</div>
+      <h3>${escapeHtml(d.title||"Untitled listing")}</h3>
+      <div class="price-row"><span class="price">${money(d.price,d.currency)}</span>
+        <span class="ref">${money(d.reference,d.currency)}</span></div>
+      <div class="savings">↓ Save ~${money(d.est_savings,d.currency)} vs. market</div>
+      <div class="sub">${d.condition?escapeHtml(d.condition):"Condition unlisted"}${d.seller?" · "+escapeHtml(d.seller):""}</div>
+      ${conf}
+      <div class="card-foot">
+        <a class="btn btn-view" href="${d.url||'#'}" target="_blank" rel="noopener">View listing →</a>
+      </div>
+    </div>
+  </div>`;
+}
+
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
+// live-tick the auction countdowns
+setInterval(()=>{
+  document.querySelectorAll(".countdown[data-end]").forEach(el=>{
+    const end = parseFloat(el.dataset.end);
+    if(end) el.textContent = countdown(end);
+  });
+}, 30000);
+
+document.getElementById("scanBtn").onclick = async function(){
+  this.disabled = true; const orig = this.textContent; this.textContent = "Scanning…";
+  try{
+    await fetch("/api/scout/scan", {method:"POST"});
+    // poll status until the scan finishes, then reload deals
+    let tries=0;
+    const poll = setInterval(async ()=>{
+      await loadStatus(); tries++;
+      const scanning = document.querySelector(".dot.spin");
+      if(!scanning || tries>20){ clearInterval(poll); await load(); this.disabled=false; this.textContent=orig; }
+    }, 1500);
+  }catch(e){ this.disabled=false; this.textContent=orig; }
+};
+
+document.getElementById("sportSel").onchange = e=>{ state.sport=e.target.value; load(); };
+document.getElementById("discSel").onchange = e=>{ state.min=e.target.value; load(); };
+document.getElementById("sortSel").onchange = e=>{ state.sort=e.target.value; render(); };
+
+buildChips();
+loadStatus();
+load();
+setInterval(loadStatus, 20000);   // refresh status
+setInterval(load, 60000);         // refresh deals every minute
+</script>
+</body>
+</html>
