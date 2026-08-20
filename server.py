@@ -584,8 +584,13 @@ if __name__ == "__main__":
     print(f"  eBay listings : {'LIVE' if ebay_live() else 'DEMO (add eBay keys)'}")
     print(f"  Stripe payments: {'LIVE' if stripe_live() else 'DEMO (add Stripe key)'}")
     print(f"  Shippo labels : {'LIVE' if shippo_live() else 'DEMO (add Shippo key)'}")
-    print(f"  Deal Scout    : {'LIVE eBay scan' if ebay_live() else 'DEMO (add eBay keys)'}"
-          f" every {scout.interval_min()} min")
+    if ebay_live():
+        scout_mode = "LIVE (eBay API)"
+    elif scout.public_ebay_enabled():
+        scout_mode = "LIVE (eBay public search, no keys)"
+    else:
+        scout_mode = "DEMO"
+    print(f"  Deal Scout    : {scout_mode} every {scout.interval_min()} min")
     scout.init(CFG, http_json, ebay_get_token, ebay_live)
     scout.start()
     ThreadingHTTPServer((HOST, PORT), Handler).serve_forever()

@@ -34,14 +34,18 @@ Design notes
   start(). No import of server here, so there's no circular import.
 """
 
+import gzip
 import json
 import math
 import os
 import random
+import re
 import statistics
 import threading
 import time
+import urllib.error
 import urllib.parse
+import urllib.request
 
 SITE_DIR = os.path.dirname(os.path.abspath(__file__))
 DEALS_PATH = os.path.join(SITE_DIR, "deals.json")
@@ -119,6 +123,12 @@ def per_query_limit():
 def autostart():
     # Background loop on by default; set SCOUT_AUTOSTART=false to require manual scans.
     val = _cfg.get("SCOUT_AUTOSTART", True)
+    return str(val).lower() not in ("false", "0", "no", "off")
+
+
+def public_ebay_enabled():
+    # Scrape eBay's public search (no API keys) when keys aren't configured.
+    val = _cfg.get("SCOUT_PUBLIC_EBAY", True)
     return str(val).lower() not in ("false", "0", "no", "off")
 
 
@@ -297,10 +307,184 @@ def _price_val(p):
         return None
 
 
+# ---------------------------------------------------------------- eBay (public search, no API key)
+
+# A desktop browser UA — eBay serves the normal results HTML for this.
+_PUBLIC_HEADERS = {
+    "User-Agent": ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                   "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"),
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.9",
+}
+
+
+def _http_get_text(url, headers=None):
+    """GET a page and return (html_text, error). Handles gzip."""
+    req = urllib.request.Request(url, headers=headers or _PUBLIC_HEADERS, method="GET")
+    try:
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            raw = resp.read()
+            if resp.headers.get("Content-Encoding") == "gzip":
+                raw = gzip.decompress(raw)
+            return raw.decode("utf-8", "replace"), None
+    except urllib.error.HTTPError as e:
+        return None, f"HTTP {e.code} from {url}"
+    except Exception as e:
+        return None, f"request to {url} failed: {e}"
+
+
+def fetch_ebay_public(query, category, limit):
+    """Scrape eBay's public search results (no API key required).
+
+    Polite by design: a couple of pages per query, a short pause between pages,
+    and the whole watchlist runs on a slow interval. This reads the same public
+    results page a shopper sees.
+    """
+    results, seen = [], set()
+    per_page = 60
+    pages = max(1, min(3, math.ceil(limit / per_page)))
+    for pg in range(1, pages + 1):
+        params = urllib.parse.urlencode({
+            "_nkw": query,
+            "_ipg": str(per_page),   # items per page
+            "_pgn": str(pg),         # page number
+            "LH_PrefLoc": "1",       # prefer US-located items
+        })
+        html, err = _http_get_text(f"https://www.ebay.com/sch/i.html?{params}")
+        if err:
+            return (results or None), (None if results else err)
+        items = _parse_ebay_search(html, query, category)
+        new = 0
+        for it in items:
+            if it["id"] in seen:
+                continue
+            seen.add(it["id"])
+            results.append(it)
+            new += 1
+        if new < 10:            # last page reached
+            break
+        if pg < pages:
+            time.sleep(1.2)     # be gentle between page requests
+    return results[:limit], None
+
+
+# Precompiled patterns for the results markup.
+_RE_PRICE = re.compile(r'class="s-item__price"[^>]*>(.*?)</span>', re.S)
+_RE_TITLE = re.compile(r'class="s-item__title"[^>]*>(.*?)</(?:div|h3|span)>\s*</(?:div|h3|a)>', re.S)
+_RE_TITLE_FALLBACK = re.compile(r'class="s-item__title"[^>]*>(.*?)</div>', re.S)
+_RE_LINK = re.compile(r'class="s-item__link"[^>]*href="([^"]+)"')
+_RE_IMG = re.compile(r'<img[^>]+(?:data-src|src)="(https?://[^"]+)"')
+_RE_ITEMID = re.compile(r'/itm/(?:[^/]+/)?(\d{6,})')
+_RE_BIDS = re.compile(r's-item__bid[^"]*"[^>]*>(.*?)</span>', re.S)
+_RE_TIMELEFT = re.compile(r's-item__time-left"[^>]*>(.*?)</span>', re.S)
+_RE_SUBTITLE = re.compile(r'class="s-item__subtitle"[^>]*>(.*?)</div>', re.S)
+_RE_TAGSTRIP = re.compile(r'<[^>]+>')
+_RE_MONEY = re.compile(r'([\d][\d,]*(?:\.\d{2})?)')
+
+
+def _strip_tags(s):
+    return re.sub(r"\s+", " ", _RE_TAGSTRIP.sub(" ", s)).strip()
+
+
+def _money_from_text(text):
+    """First dollar figure in a price cell ('$1,234.56', ranges -> low end)."""
+    m = _RE_MONEY.search(text.replace("&nbsp;", " "))
+    if not m:
+        return None
+    try:
+        return round(float(m.group(1).replace(",", "")), 2)
+    except ValueError:
+        return None
+
+
+def _timeleft_to_epoch(text):
+    """'1d 5h left' / '5h 12m' / '45m' -> epoch seconds, or None."""
+    t = _strip_tags(text).lower()
+    d = re.search(r"(\d+)\s*d", t)
+    h = re.search(r"(\d+)\s*h", t)
+    mi = re.search(r"(\d+)\s*m", t)
+    if not (d or h or mi):
+        return None
+    secs = (int(d.group(1)) * 86400 if d else 0) + \
+           (int(h.group(1)) * 3600 if h else 0) + \
+           (int(mi.group(1)) * 60 if mi else 0)
+    return time.time() + secs if secs > 0 else None
+
+
+def _parse_ebay_search(html, query, category):
+    """Parse eBay search-results HTML into normalized listings (stdlib only)."""
+    items = []
+    # One "s-item__wrapper" per result card; the first chunk is page chrome.
+    for chunk in html.split("s-item__wrapper")[1:]:
+        link_m = _RE_LINK.search(chunk)
+        if not link_m:
+            continue
+        url = link_m.group(1).split("?")[0]
+        id_m = _RE_ITEMID.search(url) or _RE_ITEMID.search(chunk)
+        item_id = f"ebay-{id_m.group(1)}" if id_m else "ebay-" + url
+
+        title_m = _RE_TITLE.search(chunk) or _RE_TITLE_FALLBACK.search(chunk)
+        title = _strip_tags(title_m.group(1)) if title_m else ""
+        # eBay salts a placeholder card and "New Listing" tags into titles.
+        title = re.sub(r"^\s*(new listing|sponsored)\s*", "", title, flags=re.I).strip()
+        if not title or title.lower() in ("shop on ebay", "shop on eBay".lower()):
+            continue
+
+        price_m = _RE_PRICE.search(chunk)
+        price = _money_from_text(_strip_tags(price_m.group(1))) if price_m else None
+        if price is None:
+            continue
+
+        img_m = _RE_IMG.search(chunk)
+        image = img_m.group(1) if img_m else None
+
+        bids_txt = _strip_tags(_RE_BIDS.search(chunk).group(1)) if _RE_BIDS.search(chunk) else ""
+        is_auction = "bid" in bids_txt.lower()
+        bid_count = None
+        bc = re.search(r"(\d+)", bids_txt)
+        if bc:
+            bid_count = int(bc.group(1))
+        end_time = None
+        tl_m = _RE_TIMELEFT.search(chunk)
+        if tl_m:
+            end_time = _timeleft_to_epoch(tl_m.group(1))
+            if end_time:
+                is_auction = True  # eBay shows time-left on timed auction listings
+
+        sub_m = _RE_SUBTITLE.search(chunk)
+        condition = _strip_tags(sub_m.group(1)) if sub_m else None
+
+        items.append({
+            "source": "ebay",
+            "id": item_id,
+            "title": title,
+            "price": price,
+            "bin_price": None if is_auction else price,
+            "currency": "USD",
+            "image": image,
+            "url": url,
+            "condition": condition,
+            "seller": None,
+            "buying_options": ["AUCTION"] if is_auction else ["FIXED_PRICE"],
+            "is_auction": is_auction,
+            "bid_count": bid_count,
+            "end_time": end_time,
+            "category": category,
+            "sport": _guess_sport(title),
+            "query": query,
+        })
+    return items
+
+
 # Source registry — add adapters here as they become available.
 # Each adapter: fn(query, category, limit) -> (list_of_normalized_items, error)
+# needs(): whether this source is currently usable given config/credentials.
 SOURCES = {
-    "ebay": {"fetch": fetch_ebay, "needs": lambda: _ebay_live()},
+    # Official Browse API — used automatically when eBay keys are configured.
+    "ebay_api": {"fetch": fetch_ebay, "needs": lambda: _ebay_live()},
+    # Public search scrape — the default when no keys are set.
+    "ebay_public": {"fetch": fetch_ebay_public,
+                    "needs": lambda: (not _ebay_live()) and public_ebay_enabled()},
 }
 
 
@@ -585,7 +769,7 @@ def init(cfg, http_json, ebay_token, ebay_live):
     _http_json = http_json
     _ebay_token = ebay_token
     _ebay_live = ebay_live
-    _state["mode"] = "live" if ebay_live() else "demo"
+    _state["mode"] = "live" if (ebay_live() or public_ebay_enabled()) else "demo"
 
 
 def start():

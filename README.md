@@ -50,18 +50,31 @@ spam the feed. Listings with red-flag words (empty box, reprint, custom,
 > **Honest limitations.** The reference is a *market-asking* proxy, not sold-comp
 > data — eBay's true sold prices need the restricted Marketplace Insights API.
 > Treat deals as leads: always read the listing, vet the seller, and confirm
-> condition/authenticity before buying. eBay is the one live source wired in
-> today (real, API-based, within eBay's terms). Estate-sale and storage-auction
-> sites have no open APIs, so they're represented in demo mode; new sources plug
-> into the `SOURCES` registry in `scout.py`.
+> condition/authenticity before buying. eBay is the live source wired in today.
+> Estate-sale and storage-auction sites have no open APIs, so they're represented
+> in demo mode; new sources plug into the `SOURCES` registry in `scout.py`.
 
-**Turning it on.** The Scout uses the same eBay app keys as the storefront
-(`EBAY_CLIENT_ID` + `EBAY_CLIENT_SECRET`; a seller username is *not* needed for
-scouting). With no keys it runs in **demo mode** with realistic sample deals so
-the dashboard works end-to-end. Tuning lives in config.json /
-env vars: `SCOUT_INTERVAL_MIN`, `SCOUT_MIN_DISCOUNT`, `SCOUT_MIN_COMPS`,
-`SCOUT_AUCTION_WINDOW_HOURS`, `SCOUT_PER_QUERY_LIMIT`, `SCOUT_RETENTION_DAYS`,
-and `SCOUT_AUTOSTART`.
+**Turning it on — no keys needed.** By default the Scout scrapes eBay's
+**public search results** (the same page a shopper sees), so it runs live with
+**zero setup** — no API keys, no eBay account. It reads a couple of pages per
+saved search on a slow interval to stay polite. Two sources, picked
+automatically:
+
+| Setup | Source used |
+|---|---|
+| Nothing configured (default) | eBay **public search** — live, no keys |
+| `EBAY_CLIENT_ID` + `EBAY_CLIENT_SECRET` set | eBay **Browse API** — more robust, higher limits |
+
+Set `SCOUT_PUBLIC_EBAY=false` to turn the public scrape off (e.g. if you only
+want the API source, or to fall back to demo data). Other tuning lives in
+config.json / env vars: `SCOUT_INTERVAL_MIN`, `SCOUT_MIN_DISCOUNT`,
+`SCOUT_MIN_COMPS`, `SCOUT_AUCTION_WINDOW_HOURS`, `SCOUT_PER_QUERY_LIMIT`,
+`SCOUT_RETENTION_DAYS`, and `SCOUT_AUTOSTART`.
+
+> **Note on public scraping.** Scraping is best-effort and depends on eBay's
+> page markup; if eBay changes it or rate-limits the requests, results can
+> thin out. For heavy or long-term use, add the free eBay API keys above — the
+> Browse API is the stable, terms-friendly path. Keep the interval modest.
 
 ## Going live — 3 integrations
 
