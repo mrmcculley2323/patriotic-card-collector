@@ -1,7 +1,12 @@
-# Patriotic Card Collector — Storefront
+# Patriotic Card Collector — Storefront + Deal Scout
 
-A patriotic sports-card storefront with live eBay listings, direct Buy-It-Now
-checkout (Stripe), and automatic USPS shipping labels (Shippo).
+Two tools in one zero-dependency Python app:
+
+* **Storefront** (`/`) — sell cards: live eBay listings, direct Buy-It-Now
+  checkout (Stripe), and automatic USPS shipping labels (Shippo).
+* **Deal Scout** (`/deals.html`) — *buy* cards: a background search engine that
+  continuously scans the marketplace for **undervalued sealed boxes,
+  memorabilia, and card lots** and ranks the best buying opportunities.
 
 ## Run it
 
@@ -20,7 +25,56 @@ you test the whole flow safely. Add keys one at a time to go live.
 | Page | Who it's for |
 |---|---|
 | `/` | Buyers — live eBay listings + Buy-It-Now direct checkout |
+| `/deals.html` | **You, as a buyer** — the Deal Scout dashboard of undervalued finds |
 | `/orders.html` | You — every order with shipping address, tracking #, and a Print Label button |
+
+## Deal Scout — the undervalued-inventory finder
+
+The Scout runs a background loop (default every 30 min) over a **watchlist** of
+searches and flags listings priced well below the going rate. Open
+`/deals.html` to see ranked deals, filter by category/sport/discount, and hit
+**Scan now** to sweep on demand.
+
+**What it hunts** (edit `watchlist.json` to change it): sealed hobby/wax boxes,
+card lots & collections (estate, storage-unit, "shoebox" finds), and signed
+memorabilia — across baseball, basketball, football, and more.
+
+**How it decides something is undervalued.** For each search it builds a
+*reference price* from the median Buy-It-Now asking price of comparable current
+listings, then flags any item priced at least `SCOUT_MIN_DISCOUNT` (default
+25%) below that. Auctions only surface when they're **ending soon** *and* the
+current bid is still under reference — so early auctions with a $1 bid don't
+spam the feed. Listings with red-flag words (empty box, reprint, custom,
+"read description", etc.) are filtered out.
+
+> **Honest limitations.** The reference is a *market-asking* proxy, not sold-comp
+> data — eBay's true sold prices need the restricted Marketplace Insights API.
+> Treat deals as leads: always read the listing, vet the seller, and confirm
+> condition/authenticity before buying. eBay is the live source wired in today.
+> Estate-sale and storage-auction sites have no open APIs, so they're represented
+> in demo mode; new sources plug into the `SOURCES` registry in `scout.py`.
+
+**Turning it on — no keys needed.** By default the Scout scrapes eBay's
+**public search results** (the same page a shopper sees), so it runs live with
+**zero setup** — no API keys, no eBay account. It reads a couple of pages per
+saved search on a slow interval to stay polite. Two sources, picked
+automatically:
+
+| Setup | Source used |
+|---|---|
+| Nothing configured (default) | eBay **public search** — live, no keys |
+| `EBAY_CLIENT_ID` + `EBAY_CLIENT_SECRET` set | eBay **Browse API** — more robust, higher limits |
+
+Set `SCOUT_PUBLIC_EBAY=false` to turn the public scrape off (e.g. if you only
+want the API source, or to fall back to demo data). Other tuning lives in
+config.json / env vars: `SCOUT_INTERVAL_MIN`, `SCOUT_MIN_DISCOUNT`,
+`SCOUT_MIN_COMPS`, `SCOUT_AUCTION_WINDOW_HOURS`, `SCOUT_PER_QUERY_LIMIT`,
+`SCOUT_RETENTION_DAYS`, and `SCOUT_AUTOSTART`.
+
+> **Note on public scraping.** Scraping is best-effort and depends on eBay's
+> page markup; if eBay changes it or rate-limits the requests, results can
+> thin out. For heavy or long-term use, add the free eBay API keys above — the
+> Browse API is the stable, terms-friendly path. Keep the interval modest.
 
 ## Going live — 3 integrations
 

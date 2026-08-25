@@ -1,0 +1,14 @@
+[
+  { "query": "baseball hobby box sealed", "category": "sealed_box", "sport": "Baseball" },
+  { "query": "basketball hobby box sealed", "category": "sealed_box", "sport": "Basketball" },
+  { "query": "football hobby box sealed", "category": "sealed_box", "sport": "Football" },
+  { "query": "topps chrome hobby box factory sealed", "category": "sealed_box", "sport": "Baseball" },
+  { "query": "panini prizm sealed hobby box", "category": "sealed_box", "sport": "Basketball" },
+  { "query": "bowman chrome hobby box sealed", "category": "sealed_box", "sport": "Baseball" },
+  { "query": "unopened wax box vintage baseball", "category": "sealed_box", "sport": "Baseball" },
+  { "query": "sports card lot collection estate", "category": "card_lot", "sport": "Mixed" },
+  { "query": "baseball card lot vintage shoebox", "category": "card_lot", "sport": "Baseball" },
+  { "query": "basketball card lot collection", "category": "card_lot", "sport": "Basketball" },
+  { "query": "sports memorabilia lot signed", "category": "memorabilia", "sport": "Mixed" },
+  { "query": "storage unit sports cards collection", "category": "card_lot", "sport": "Mixed" }
+]

@@ -35,6 +35,11 @@ demo to live. Point the Stripe webhook at
 - **Cold starts:** the free instance sleeps after ~15 minutes idle; the first
   visitor after that waits ~30–60 seconds while it wakes. Fine for starting
   out; $7/month removes it later if the shop takes off.
+- **Deal Scout on free tier:** the background scanner only runs while the
+  instance is awake, so on free tier it effectively scans when you open the
+  site (which wakes it) and then on its interval until it sleeps again. For
+  true 24/7 continuous scanning, use the $7/month always-on instance, or hit
+  **Scan now** on the dashboard when you want a fresh sweep.
 - **Order history resets on redeploys** (free tier has no permanent disk).
   This does NOT lose real orders: every paid order lives permanently in your
   Stripe dashboard and every label in your Shippo dashboard — print labels
